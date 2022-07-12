@@ -1,0 +1,18 @@
+# IDE Files
+## PHPStorm InteliJ
+*.idea
+
+## Visual Studio
+*.vscode
+
+## Eclipse
+.buildpath
+.project
+.settings
+
+## Vi
+*~
+*.swp
+
+# Docusauros
+.DS_Store

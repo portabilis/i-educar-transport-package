@@ -1,0 +1,25 @@
+{
+    "name": "portabilis/i-educar-transport-package",
+    "authors": [
+        {
+            "name": "Portabilis Tecnologia",
+            "email": "contato@portabilis.com.br"
+        }
+    ],
+    "autoload": {
+        "classmap": [
+            "ieducar/intranet/include",
+            "ieducar/lib"
+        ],
+        "psr-4": {
+            "iEducar\\Packages\\Transport\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "iEducar\\Packages\\Transport\\Providers\\TransportServiceProvider"
+            ]
+        }
+    }
+}
