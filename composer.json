@@ -9,7 +9,7 @@
     "autoload": {
         "classmap": [
             "ieducar/intranet/include",
-            "ieducar/lib"
+            "ieducar/modules/Transporte"
         ],
         "psr-4": {
             "iEducar\\Packages\\Transport\\": "src/"
