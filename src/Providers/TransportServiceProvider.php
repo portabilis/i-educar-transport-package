@@ -13,7 +13,7 @@ class TransportServiceProvider extends ServiceProvider
             $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
         }
 
-        LegacyController::resolver(function ($uri) {
+        LegacyController::resolver(static function ($uri) {
             if (in_array($uri, static::intranet())) {
                 return __DIR__ . '/../../ieducar/' . $uri;
             }
@@ -70,6 +70,7 @@ class TransportServiceProvider extends ServiceProvider
             'intranet/transporte_rota_lst.php',
             'intranet/transporte_veiculo_det.php',
             'intranet/transporte_veiculo_lst.php',
+            'intranet/transporte_aluno_cad.php',
         ];
     }
 }
