@@ -184,7 +184,7 @@ return new class extends clsCadastro {
 
     public function makeExtra()
     {
-        return file_get_contents(__DIR__ . '/scripts/extra/transporte-itinerario-cad.js');
+        return file_get_contents(__DIR__ . '/scripts/transporte-itinerario-cad.js');
     }
 
     public function Formular()
