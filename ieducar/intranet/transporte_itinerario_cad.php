@@ -113,10 +113,10 @@ return new class extends clsCadastro {
         Portabilis_View_Helper_Application::loadStylesheet($this, $style);
 
         Portabilis_View_Helper_Application::loadJavascript(
-            $this,
-            ['/vendor/legacy/Portabilis/Assets/Javascripts/Utils.js',
-                        '/vendor/legacy/Portabilis/Assets/Javascripts/Frontend/Inputs/SimpleSearch.js',
-                        '/vendor/legacy/Portabilis/Assets/Javascripts/Validator.js']
+            $this, [
+                '/vendor/legacy/Portabilis/Assets/Javascripts/Frontend/Inputs/SimpleSearch.js',
+                '/vendor/legacy/Portabilis/Assets/Javascripts/Validator.js'
+            ]
         );
         $this->addBotao('Excluir todos', "transporte_itinerario_del.php?cod_rota={$this->cod_rota}");
     }
