@@ -183,30 +183,20 @@ class clsModulesPontoTransporteEscolar extends Model
     {
         $db = new clsBanco();
 
-        $sql = "SELECT {$this->_campos_lista},
-
-              (SELECT l.nome FROM public.logradouro l WHERE l.idlog = ponto_transporte_escolar.idlog) as logradouro,
-
-              (SELECT l.idtlog FROM public.logradouro l WHERE l.idlog = ponto_transporte_escolar.idlog) as idtlog,
-
-              (SELECT b.nome FROM public.bairro b WHERE b.idbai = ponto_transporte_escolar.idbai) as bairro,
-
-              (SELECT b.zona_localizacao FROM public.bairro b WHERE b.idbai = ponto_transporte_escolar.idbai) as zona_localizacao,
-
-              (SELECT m.nome FROM public.municipio m, public.logradouro l WHERE m.idmun = l.idmun AND l.idlog = ponto_transporte_escolar.idlog) as municipio,
-
-              (SELECT m.sigla_uf FROM public.municipio m, public.logradouro l WHERE m.idmun = l.idmun AND l.idlog = ponto_transporte_escolar.idlog) as sigla_uf,
-
-              (SELECT l.idmun FROM public.logradouro l WHERE l.idlog = ponto_transporte_escolar.idlog) as idmun,
-
-              (SELECT bairro.iddis FROM public.bairro
-                WHERE idbai = ponto_transporte_escolar.idbai) as iddis,
-
-              (SELECT distrito.nome FROM public.distrito
-                INNER JOIN public.bairro ON (bairro.iddis = distrito.iddis)
-                WHERE idbai = ponto_transporte_escolar.idbai) as distrito
-
+        $sql = "SELECT cod_ponto_transporte_escolar, descricao, cep, idlog, idbai, complemento, numero, ponto_transporte_escolar.latitude, ponto_transporte_escolar.longitude,
+              p.address as logradouro,
+              p.id as idtlog,
+              p.neighborhood as bairro,
+              1 as zona_localizacao,
+              c.name as municipio,
+              s.abbreviation as sigla_uf,
+              p.city_id as idmun,
+              p.id as iddis,
+              c.name as distrito
             FROM {$this->_tabela}
+            LEFT JOIN public.places p ON p.id = ponto_transporte_escolar.idlog
+            LEFT JOIN public.cities c ON c.id = p.city_id
+            LEFT JOIN public.states s ON s.id = c.state_id
     ";
         $filtros = '';
 
@@ -260,30 +250,21 @@ class clsModulesPontoTransporteEscolar extends Model
     {
         if (is_numeric($this->cod_ponto_transporte_escolar)) {
             $db = new clsBanco();
-            $db->Consulta("SELECT {$this->_campos_lista},
-
-              (SELECT l.nome FROM public.logradouro l WHERE l.idlog = ponto_transporte_escolar.idlog) as logradouro,
-
-              (SELECT l.idtlog FROM public.logradouro l WHERE l.idlog = ponto_transporte_escolar.idlog) as idtlog,
-
-              (SELECT b.nome FROM public.bairro b WHERE b.idbai = ponto_transporte_escolar.idbai) as bairro,
-
-              (SELECT b.zona_localizacao FROM public.bairro b WHERE b.idbai = ponto_transporte_escolar.idbai) as zona_localizacao,
-
-              (SELECT m.nome FROM public.municipio m, public.logradouro l WHERE m.idmun = l.idmun AND l.idlog = ponto_transporte_escolar.idlog) as municipio,
-
-              (SELECT m.sigla_uf FROM public.municipio m, public.logradouro l WHERE m.idmun = l.idmun AND l.idlog = ponto_transporte_escolar.idlog) as sigla_uf,
-
-              (SELECT l.idmun FROM public.logradouro l WHERE l.idlog = ponto_transporte_escolar.idlog) as idmun,
-
-              (SELECT bairro.iddis FROM public.bairro
-                WHERE idbai = ponto_transporte_escolar.idbai) as iddis,
-
-              (SELECT distrito.nome FROM public.distrito
-                INNER JOIN public.bairro ON (bairro.iddis = distrito.iddis)
-                WHERE idbai = ponto_transporte_escolar.idbai) as distrito
-
-            FROM {$this->_tabela} WHERE cod_ponto_transporte_escolar = '{$this->cod_ponto_transporte_escolar}'");
+            $db->Consulta("SELECT cod_ponto_transporte_escolar, descricao, cep, idlog, idbai, complemento, numero, ponto_transporte_escolar.latitude, ponto_transporte_escolar.longitude,
+              p.address as logradouro,
+              p.id as idtlog,
+              p.neighborhood as bairro,
+              1 as zona_localizacao,
+              c.name as municipio,
+              s.abbreviation as sigla_uf,
+              p.city_id as idmun,
+              p.id as iddis,
+              c.name as distrito
+            FROM {$this->_tabela}
+            LEFT JOIN public.places p ON p.id = ponto_transporte_escolar.idlog
+            LEFT JOIN public.cities c ON c.id = p.city_id
+            LEFT JOIN public.states s ON s.id = c.state_id
+            WHERE cod_ponto_transporte_escolar = '{$this->cod_ponto_transporte_escolar}'");
             $db->ProximoRegistro();
 
             return $db->Tupla();
