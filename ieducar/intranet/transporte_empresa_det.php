@@ -1,5 +1,10 @@
 <?php
 
+use App\Models\LegacyOrganization;
+use App\Models\LegacyPerson;
+use App\Models\LegacyPhone;
+use App\Models\PersonHasPlace;
+
 return new class extends clsDetalhe {
     public $titulo;
 
@@ -21,37 +26,40 @@ return new class extends clsDetalhe {
             $this->simpleRedirect('transporte_empresa_lst.php');
         }
 
-        $objPessoaJuridica = new clsPessoaJuridica();
-        list($id_federal, $endereco, $cep, $nm_bairro, $cidade, $ddd_telefone_1, $telefone_1, $ddd_telefone_2, $telefone_2, $ddd_telefone_mov, $telefone_mov, $ddd_telefone_fax, $telefone_fax, $email, $ins_est) = $objPessoaJuridica->queryRapida($registro['ref_idpes'], 'cnpj', 'logradouro', 'cep', 'bairro', 'cidade', 'ddd_1', 'fone_1', 'ddd_2', 'fone_2', 'ddd_mov', 'fone_mov', 'ddd_fax', 'fone_fax', 'email', 'insc_estadual');
+        $person = LegacyPerson::query()->with('phones')->find($registro['ref_idpes'], ['idpes', 'email']);
+        $organization = LegacyOrganization::query()->whereKey($registro['ref_idpes'])->first(['idpes', 'cnpj', 'insc_estadual']);
+        $place = PersonHasPlace::query()->with('place.city')->where('person_id', $registro['ref_idpes'])->first()?->place;
+        $phones = $person?->phones->keyBy('tipo') ?? collect();
+
+        $tel1 = $phones->get(LegacyPhone::TYPE_LANDLINE);
+        $tel2 = $phones->get(LegacyPhone::TYPE_MOBILE);
+        $cel  = $phones->get(LegacyPhone::TYPE_MOBILE_ALT);
+        $fax  = $phones->get(LegacyPhone::TYPE_FAX);
 
         $this->addDetalhe(['Código da empresa', $cod_empresa_transporte_escolar]);
         $this->addDetalhe(['Nome fantasia', $registro['nome_empresa']]);
         $this->addDetalhe(['Nome do responsável', $registro['nome_responsavel']]);
-        $this->addDetalhe(['CNPJ', empty($id_federal) ? '' : int2CNPJ($id_federal)]);
-        $this->addDetalhe(['Endereço', $endereco]);
-        $this->addDetalhe(['CEP', $cep]);
-        $this->addDetalhe(['Bairro', $nm_bairro]);
-        $this->addDetalhe(['Cidade', $cidade]);
-        if (trim($telefone_1)!='') {
-            $this->addDetalhe(['Telefone 1', "({$ddd_telefone_1}) {$telefone_1}"]);
+        $this->addDetalhe(['CNPJ', empty($organization?->cnpj) ? '' : int2CNPJ($organization->cnpj)]);
+        $this->addDetalhe(['Endereço', $place?->address]);
+        $this->addDetalhe(['CEP', $place?->postal_code]);
+        $this->addDetalhe(['Bairro', $place?->neighborhood]);
+        $this->addDetalhe(['Cidade', $place?->city?->name]);
+        if ($tel1?->fone) {
+            $this->addDetalhe(['Telefone 1', "({$tel1->ddd}) {$tel1->fone}"]);
         }
-        if (trim($telefone_2)!='') {
-            $this->addDetalhe(['Telefone 2', "({$ddd_telefone_2}) {$telefone_2}"]);
+        if ($tel2?->fone) {
+            $this->addDetalhe(['Telefone 2', "({$tel2->ddd}) {$tel2->fone}"]);
         }
-        if (trim($telefone_mov)!='') {
-            $this->addDetalhe(['Celular', "({$ddd_telefone_mov}) {$telefone_mov}"]);
+        if ($cel?->fone) {
+            $this->addDetalhe(['Celular', "({$cel->ddd}) {$cel->fone}"]);
         }
-        if (trim($telefone_fax)!='') {
-            $this->addDetalhe(['Fax', "({$ddd_telefone_fax}) {$telefone_fax}"]);
-        }
-
-        $this->addDetalhe(['E-mail', $email]);
-
-        if (! $ins_est) {
-            $ins_est = 'isento';
+        if ($fax?->fone) {
+            $this->addDetalhe(['Fax', "({$fax->ddd}) {$fax->fone}"]);
         }
 
-        $this->addDetalhe(['Inscrição estadual', $ins_est]);
+        $this->addDetalhe(['E-mail', $person?->email]);
+
+        $this->addDetalhe(['Inscrição estadual', $organization?->insc_estadual ?: 'isento']);
         $this->addDetalhe(['Observação', $registro['observacao']]);
         $this->url_cancelar = 'transporte_empresa_lst.php';
 
