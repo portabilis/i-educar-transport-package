@@ -26,24 +26,24 @@ return new class extends clsDetalhe {
             $this->simpleRedirect('transporte_empresa_lst.php');
         }
 
-        $person = LegacyPerson::query()->with('phones')->find($registro['ref_idpes'], ['idpes', 'email']);
-        $organization = LegacyOrganization::query()->whereKey($registro['ref_idpes'])->first(['idpes', 'cnpj', 'insc_estadual']);
-        $place = PersonHasPlace::query()->with('place.city')->where('person_id', $registro['ref_idpes'])->first()?->place;
-        $phones = $person?->phones->keyBy('tipo') ?? collect();
+        $pessoa = LegacyPerson::query()->with('phones')->find($registro['ref_idpes'], ['idpes', 'email']);
+        $juridica = LegacyOrganization::query()->whereKey($registro['ref_idpes'])->first(['idpes', 'cnpj', 'insc_estadual']);
+        $endereco = PersonHasPlace::query()->with('place.city')->where('person_id', $registro['ref_idpes'])->first()?->place;
+        $telefones = $pessoa?->phones->keyBy('tipo') ?? collect();
 
-        $tel1 = $phones->get(LegacyPhone::TYPE_LANDLINE);
-        $tel2 = $phones->get(LegacyPhone::TYPE_MOBILE);
-        $cel  = $phones->get(LegacyPhone::TYPE_MOBILE_ALT);
-        $fax  = $phones->get(LegacyPhone::TYPE_FAX);
+        $tel1 = $telefones->get(LegacyPhone::TYPE_LANDLINE);
+        $tel2 = $telefones->get(LegacyPhone::TYPE_MOBILE);
+        $cel  = $telefones->get(LegacyPhone::TYPE_MOBILE_ALT);
+        $fax  = $telefones->get(LegacyPhone::TYPE_FAX);
 
         $this->addDetalhe(['Código da empresa', $cod_empresa_transporte_escolar]);
         $this->addDetalhe(['Nome fantasia', $registro['nome_empresa']]);
         $this->addDetalhe(['Nome do responsável', $registro['nome_responsavel']]);
-        $this->addDetalhe(['CNPJ', empty($organization?->cnpj) ? '' : int2CNPJ($organization->cnpj)]);
-        $this->addDetalhe(['Endereço', $place?->address]);
-        $this->addDetalhe(['CEP', $place?->postal_code]);
-        $this->addDetalhe(['Bairro', $place?->neighborhood]);
-        $this->addDetalhe(['Cidade', $place?->city?->name]);
+        $this->addDetalhe(['CNPJ', empty($juridica?->cnpj) ? '' : int2CNPJ($juridica->cnpj)]);
+        $this->addDetalhe(['Endereço', $endereco?->address]);
+        $this->addDetalhe(['CEP', $endereco?->postal_code]);
+        $this->addDetalhe(['Bairro', $endereco?->neighborhood]);
+        $this->addDetalhe(['Cidade', $endereco?->city?->name]);
         if ($tel1?->fone) {
             $this->addDetalhe(['Telefone 1', "({$tel1->ddd}) {$tel1->fone}"]);
         }
@@ -57,9 +57,9 @@ return new class extends clsDetalhe {
             $this->addDetalhe(['Fax', "({$fax->ddd}) {$fax->fone}"]);
         }
 
-        $this->addDetalhe(['E-mail', $person?->email]);
+        $this->addDetalhe(['E-mail', $pessoa?->email]);
 
-        $this->addDetalhe(['Inscrição estadual', $organization?->insc_estadual ?: 'isento']);
+        $this->addDetalhe(['Inscrição estadual', $juridica?->insc_estadual ?: 'isento']);
         $this->addDetalhe(['Observação', $registro['observacao']]);
         $this->url_cancelar = 'transporte_empresa_lst.php';
 
