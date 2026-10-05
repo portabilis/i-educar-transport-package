@@ -3,7 +3,7 @@
 use App\Models\Place;
 use iEducar\Modules\Addressing\LegacyAddressingFields;
 
-class PontoController extends ApiCoreController
+class Api_Views_PontoController extends ApiCoreController
 {
     use LegacyAddressingFields;
 

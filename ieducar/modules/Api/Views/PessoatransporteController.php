@@ -1,6 +1,6 @@
 <?php
 
-class PessoatransporteController extends ApiCoreController
+class Api_Views_PessoatransporteController extends ApiCoreController
 {
     protected $_processoAp = 21240; //verificar
     protected $_nivelAcessoOption = App_Model_NivelAcesso::SOMENTE_ESCOLA; // verificar
