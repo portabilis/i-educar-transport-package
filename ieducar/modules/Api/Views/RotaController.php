@@ -1,6 +1,6 @@
 <?php
 
-class RotaController extends ApiCoreController
+class Api_Views_RotaController extends ApiCoreController
 {
     protected $_processoAp = 21238; //verificar
     protected $_nivelAcessoOption = App_Model_NivelAcesso::SOMENTE_ESCOLA; // verificar

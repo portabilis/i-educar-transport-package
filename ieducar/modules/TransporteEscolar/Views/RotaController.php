@@ -1,6 +1,6 @@
 <?php
 
-class RotaController extends Portabilis_Controller_Page_EditController
+class TransporteEscolar_Views_RotaController extends Portabilis_Controller_Page_EditController
 {
     protected $_dataMapper = 'Usuario_Model_FuncionarioDataMapper';
     protected $_titulo = 'i-Educar - Rotas';
