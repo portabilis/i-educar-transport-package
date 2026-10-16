@@ -4,6 +4,8 @@ use iEducar\Legacy\Model;
 
 class clsModulesPessoaTransporte extends Model
 {
+    use \iEducar\Packages\Transport\Support\EscapaSql;
+
     public $cod_pessoa_transporte;
     public $ref_idpes;
     public $ref_cod_rota_transporte_escolar;
@@ -75,31 +77,31 @@ class clsModulesPessoaTransporte extends Model
 
             if (is_numeric($this->cod_pessoa_transporte)) {
                 $campos .= "{$gruda}cod_pessoa_transporte";
-                $valores .= "{$gruda}'{$this->cod_pessoa_transporte}'";
+                $valores .= "{$gruda}'{$this->sqlTexto($this->cod_pessoa_transporte)}'";
                 $gruda = ', ';
             }
 
             if (is_numeric($this->ref_cod_rota_transporte_escolar)) {
                 $campos .= "{$gruda}ref_cod_rota_transporte_escolar";
-                $valores .= "{$gruda}'{$this->ref_cod_rota_transporte_escolar}'";
+                $valores .= "{$gruda}'{$this->sqlTexto($this->ref_cod_rota_transporte_escolar)}'";
                 $gruda = ', ';
             }
 
             if (is_numeric($this->ref_idpes)) {
                 $campos .= "{$gruda}ref_idpes";
-                $valores .= "{$gruda}'{$this->ref_idpes}'";
+                $valores .= "{$gruda}'{$this->sqlTexto($this->ref_idpes)}'";
                 $gruda = ', ';
             }
 
             if (is_numeric($this->ref_cod_ponto_transporte_escolar)) {
                 $campos .= "{$gruda}ref_cod_ponto_transporte_escolar";
-                $valores .= "{$gruda}'{$this->ref_cod_ponto_transporte_escolar}'";
+                $valores .= "{$gruda}'{$this->sqlTexto($this->ref_cod_ponto_transporte_escolar)}'";
                 $gruda = ', ';
             }
 
             if (is_numeric($this->ref_idpes_destino)) {
                 $campos .= "{$gruda}ref_idpes_destino";
-                $valores .= "{$gruda}'{$this->ref_idpes_destino}'";
+                $valores .= "{$gruda}'{$this->sqlTexto($this->ref_idpes_destino)}'";
                 $gruda = ', ';
             }
 
@@ -112,7 +114,7 @@ class clsModulesPessoaTransporte extends Model
 
             if (is_numeric($this->turno)) {
                 $campos .= "{$gruda}turno";
-                $valores .= "{$gruda}'{$this->turno}'";
+                $valores .= "{$gruda}'{$this->sqlTexto($this->turno)}'";
                 $gruda = ', ';
             }
 
@@ -143,17 +145,17 @@ class clsModulesPessoaTransporte extends Model
             $gruda = '';
 
             if (is_numeric($this->ref_cod_rota_transporte_escolar)) {
-                $set .= "{$gruda}ref_cod_rota_transporte_escolar = '{$this->ref_cod_rota_transporte_escolar}'";
+                $set .= "{$gruda}ref_cod_rota_transporte_escolar = '{$this->sqlTexto($this->ref_cod_rota_transporte_escolar)}'";
                 $gruda = ', ';
             }
 
             if (is_numeric($this->ref_idpes)) {
-                $set .= "{$gruda}ref_idpes = '{$this->ref_idpes}'";
+                $set .= "{$gruda}ref_idpes = '{$this->sqlTexto($this->ref_idpes)}'";
                 $gruda = ', ';
             }
 
             if (is_numeric($this->ref_cod_ponto_transporte_escolar)) {
-                $set .= "{$gruda}ref_cod_ponto_transporte_escolar = '{$this->ref_cod_ponto_transporte_escolar}'";
+                $set .= "{$gruda}ref_cod_ponto_transporte_escolar = '{$this->sqlTexto($this->ref_cod_ponto_transporte_escolar)}'";
                 $gruda = ', ';
             } else {
                 $set .= "{$gruda}ref_cod_ponto_transporte_escolar = null";
@@ -161,7 +163,7 @@ class clsModulesPessoaTransporte extends Model
             }
 
             if (is_numeric($this->ref_idpes_destino)) {
-                $set .= "{$gruda}ref_idpes_destino = '{$this->ref_idpes_destino}'";
+                $set .= "{$gruda}ref_idpes_destino = '{$this->sqlTexto($this->ref_idpes_destino)}'";
                 $gruda = ', ';
             } else {
                 $set .= "{$gruda}ref_idpes_destino = null";
@@ -175,13 +177,13 @@ class clsModulesPessoaTransporte extends Model
             }
 
             if (is_numeric($this->turno)) {
-                $set .= "{$gruda}turno = '{$this->turno}'";
+                $set .= "{$gruda}turno = '{$this->sqlTexto($this->turno)}'";
                 $gruda = ', ';
             }
 
             if ($set) {
                 $this->detalhe();
-                $db->Consulta("UPDATE {$this->_tabela} SET $set WHERE cod_pessoa_transporte = '{$this->cod_pessoa_transporte}'");
+                $db->Consulta("UPDATE {$this->_tabela} SET $set WHERE cod_pessoa_transporte = '{$this->sqlTexto($this->cod_pessoa_transporte)}'");
 
                 return true;
             }
@@ -244,27 +246,27 @@ class clsModulesPessoaTransporte extends Model
         $whereAnd = ' WHERE ';
         $whereNomes = '';
         if (is_numeric($cod_pessoa_transporte)) {
-            $filtros .= "{$whereAnd} cod_pessoa_transporte = '{$cod_pessoa_transporte}'";
+            $filtros .= "{$whereAnd} cod_pessoa_transporte = '{$this->sqlTexto($cod_pessoa_transporte)}'";
             $whereAnd = ' AND ';
         }
 
         if (is_numeric($ref_idpes)) {
-            $filtros .= "{$whereAnd} ref_idpes = '{$ref_idpes}'";
+            $filtros .= "{$whereAnd} ref_idpes = '{$this->sqlTexto($ref_idpes)}'";
             $whereAnd = ' AND ';
         }
 
         if (is_numeric($ref_cod_rota_transporte_escolar)) {
-            $filtros .= "{$whereAnd} ref_cod_rota_transporte_escolar = '{$ref_cod_rota_transporte_escolar}'";
+            $filtros .= "{$whereAnd} ref_cod_rota_transporte_escolar = '{$this->sqlTexto($ref_cod_rota_transporte_escolar)}'";
             $whereAnd = ' AND ';
         }
 
         if (is_numeric($ref_cod_ponto_transporte_escolar)) {
-            $filtros .= "{$whereAnd} ref_cod_ponto_transporte_escolar = '{$ref_cod_ponto_transporte_escolar}'";
+            $filtros .= "{$whereAnd} ref_cod_ponto_transporte_escolar = '{$this->sqlTexto($ref_cod_ponto_transporte_escolar)}'";
             $whereAnd = ' AND ';
         }
 
         if (is_numeric($ref_idpes_destino)) {
-            $filtros .= "{$whereAnd} ref_idpes_destino = '{$ref_idpes_destino}'";
+            $filtros .= "{$whereAnd} ref_idpes_destino = '{$this->sqlTexto($ref_idpes_destino)}'";
             $whereAnd = ' AND ';
         }
 
@@ -281,7 +283,7 @@ class clsModulesPessoaTransporte extends Model
         }
 
         if (is_numeric($ano_rota)) {
-            $filtros .= "{$whereAnd} rte.ano = '{$ano_rota}'";
+            $filtros .= "{$whereAnd} rte.ano = '{$this->sqlTexto($ano_rota)}'";
             $whereAnd = ' AND ';
         }
 
@@ -364,9 +366,9 @@ class clsModulesPessoaTransporte extends Model
              ) AS nome_destino2 FROM {$this->_tabela} WHERE ";
 
             if (is_numeric($this->cod_pessoa_transporte)) {
-                $sql .= " cod_pessoa_transporte = '{$this->cod_pessoa_transporte}'";
+                $sql .= " cod_pessoa_transporte = '{$this->sqlTexto($this->cod_pessoa_transporte)}'";
             } else {
-                $sql .= " ref_idpes = '{$this->ref_idpes}' ORDER BY cod_pessoa_transporte DESC LIMIT 1 ";
+                $sql .= " ref_idpes = '{$this->sqlTexto($this->ref_idpes)}' ORDER BY cod_pessoa_transporte DESC LIMIT 1 ";
             }
 
             $db->Consulta($sql);
@@ -387,7 +389,7 @@ class clsModulesPessoaTransporte extends Model
     {
         if (is_numeric($this->cod_pessoa_transporte)) {
             $db = new clsBanco();
-            $db->Consulta("SELECT 1 FROM {$this->_tabela} WHERE cod_pessoa_transporte = '{$this->cod_pessoa_transporte}'");
+            $db->Consulta("SELECT 1 FROM {$this->_tabela} WHERE cod_pessoa_transporte = '{$this->sqlTexto($this->cod_pessoa_transporte)}'");
             $db->ProximoRegistro();
 
             return $db->Tupla();
@@ -406,7 +408,7 @@ class clsModulesPessoaTransporte extends Model
         if (is_numeric($this->cod_pessoa_transporte)) {
             $this->detalhe();
 
-            $sql = "DELETE FROM {$this->_tabela} WHERE cod_pessoa_transporte = '{$this->cod_pessoa_transporte}'";
+            $sql = "DELETE FROM {$this->_tabela} WHERE cod_pessoa_transporte = '{$this->sqlTexto($this->cod_pessoa_transporte)}'";
             $db = new clsBanco();
             $db->Consulta($sql);
 

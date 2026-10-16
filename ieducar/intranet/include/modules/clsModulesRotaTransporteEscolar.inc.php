@@ -4,6 +4,8 @@ use iEducar\Legacy\Model;
 
 class clsModulesRotaTransporteEscolar extends Model
 {
+    use \iEducar\Packages\Transport\Support\EscapaSql;
+
     public $cod_rota_transporte_escolar;
     public $ref_idpes_destino;
     public $descricao;
@@ -77,7 +79,7 @@ class clsModulesRotaTransporteEscolar extends Model
 
             if (is_numeric($this->ref_idpes_destino)) {
                 $campos .= "{$gruda}ref_idpes_destino";
-                $valores .= "{$gruda}'{$this->ref_idpes_destino}'";
+                $valores .= "{$gruda}'{$this->sqlTexto($this->ref_idpes_destino)}'";
                 $gruda = ', ';
             }
 
@@ -90,37 +92,37 @@ class clsModulesRotaTransporteEscolar extends Model
 
             if (is_numeric($this->ano)) {
                 $campos .= "{$gruda}ano";
-                $valores .= "{$gruda}'{$this->ano}'";
+                $valores .= "{$gruda}'{$this->sqlTexto($this->ano)}'";
                 $gruda = ', ';
             }
 
             if (is_string($this->tipo_rota)) {
                 $campos .= "{$gruda}tipo_rota";
-                $valores .= "{$gruda}'{$this->tipo_rota}'";
+                $valores .= "{$gruda}'{$this->sqlTexto($this->tipo_rota)}'";
                 $gruda = ', ';
             }
 
             if (is_numeric($this->km_pav)) {
                 $campos .= "{$gruda}km_pav";
-                $valores .= "{$gruda}'{$this->km_pav}'";
+                $valores .= "{$gruda}'{$this->sqlTexto($this->km_pav)}'";
                 $gruda = ', ';
             }
 
             if (is_numeric($this->km_npav)) {
                 $campos .= "{$gruda}km_npav";
-                $valores .= "{$gruda}'{$this->km_npav}'";
+                $valores .= "{$gruda}'{$this->sqlTexto($this->km_npav)}'";
                 $gruda = ', ';
             }
 
             if (is_numeric($this->ref_cod_empresa_transporte_escolar)) {
                 $campos .= "{$gruda}ref_cod_empresa_transporte_escolar";
-                $valores .= "{$gruda}'{$this->ref_cod_empresa_transporte_escolar}'";
+                $valores .= "{$gruda}'{$this->sqlTexto($this->ref_cod_empresa_transporte_escolar)}'";
                 $gruda = ', ';
             }
 
             if (is_string($this->tercerizado)) {
                 $campos .= "{$gruda}tercerizado";
-                $valores .= "{$gruda}'{$this->tercerizado}'";
+                $valores .= "{$gruda}'{$this->sqlTexto($this->tercerizado)}'";
                 $gruda = ', ';
             }
 
@@ -151,7 +153,7 @@ class clsModulesRotaTransporteEscolar extends Model
             $gruda = '';
 
             if (is_numeric($this->ref_idpes_destino)) {
-                $set .= "{$gruda}ref_idpes_destino = '{$this->ref_idpes_destino}'";
+                $set .= "{$gruda}ref_idpes_destino = '{$this->sqlTexto($this->ref_idpes_destino)}'";
                 $gruda = ', ';
             }
 
@@ -162,38 +164,38 @@ class clsModulesRotaTransporteEscolar extends Model
             }
 
             if (is_numeric($this->ano)) {
-                $set .= "{$gruda}ano = '{$this->ano}'";
+                $set .= "{$gruda}ano = '{$this->sqlTexto($this->ano)}'";
                 $gruda = ', ';
             }
 
             if (is_string($this->tipo_rota)) {
-                $set .= "{$gruda}tipo_rota = '{$this->tipo_rota}'";
+                $set .= "{$gruda}tipo_rota = '{$this->sqlTexto($this->tipo_rota)}'";
                 $gruda = ', ';
             }
 
             if (is_numeric($this->km_pav)) {
-                $set .= "{$gruda}km_pav = '{$this->km_pav}'";
+                $set .= "{$gruda}km_pav = '{$this->sqlTexto($this->km_pav)}'";
                 $gruda = ', ';
             }
 
             if (is_numeric($this->km_npav)) {
-                $set .= "{$gruda}km_npav = '{$this->km_npav}'";
+                $set .= "{$gruda}km_npav = '{$this->sqlTexto($this->km_npav)}'";
                 $gruda = ', ';
             }
 
             if (is_numeric($this->ref_cod_empresa_transporte_escolar)) {
-                $set .= "{$gruda}ref_cod_empresa_transporte_escolar = '{$this->ref_cod_empresa_transporte_escolar}'";
+                $set .= "{$gruda}ref_cod_empresa_transporte_escolar = '{$this->sqlTexto($this->ref_cod_empresa_transporte_escolar)}'";
                 $gruda = ', ';
             }
 
             if (is_string($this->tercerizado)) {
-                $set .= "{$gruda}tercerizado = '{$this->tercerizado}'";
+                $set .= "{$gruda}tercerizado = '{$this->sqlTexto($this->tercerizado)}'";
                 $gruda = ', ';
             }
 
             if ($set) {
                 $this->detalhe();
-                $db->Consulta("UPDATE {$this->_tabela} SET $set WHERE cod_rota_transporte_escolar = '{$this->cod_rota_transporte_escolar}'");
+                $db->Consulta("UPDATE {$this->_tabela} SET $set WHERE cod_rota_transporte_escolar = '{$this->sqlTexto($this->cod_rota_transporte_escolar)}'");
 
                 return true;
             }
@@ -239,7 +241,7 @@ class clsModulesRotaTransporteEscolar extends Model
         $whereAnd = ' WHERE ';
 
         if (is_numeric($cod_rota_transporte_escolar)) {
-            $filtros .= "{$whereAnd} cod_rota_transporte_escolar = '{$cod_rota_transporte_escolar}'";
+            $filtros .= "{$whereAnd} cod_rota_transporte_escolar = '{$this->sqlTexto($cod_rota_transporte_escolar)}'";
             $whereAnd = ' AND ';
         }
 
@@ -250,7 +252,7 @@ class clsModulesRotaTransporteEscolar extends Model
         }
 
         if (is_numeric($ref_idpes_destino)) {
-            $filtros .= "{$whereAnd} ref_idpes_destino = '{$ref_idpes_destino}'";
+            $filtros .= "{$whereAnd} ref_idpes_destino = '{$this->sqlTexto($ref_idpes_destino)}'";
             $whereAnd = ' AND ';
         }
         if (is_string($nome_destino)) {
@@ -262,18 +264,18 @@ class clsModulesRotaTransporteEscolar extends Model
             cadastro.pessoa
           WHERE
             cadastro.pessoa.idpes = ref_idpes_destino
-            AND translate(upper(nome),'ÅÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÕÔÖÚÙÛÜÇÝÑ','AAAAAAEEEEIIIIOOOOOUUUUCYN') LIKE translate(upper('%{$nome_destino}%'),'ÅÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÕÔÖÚÙÛÜÇÝÑ','AAAAAAEEEEIIIIOOOOOUUUUCYN')
+            AND translate(upper(nome),'ÅÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÕÔÖÚÙÛÜÇÝÑ','AAAAAAEEEEIIIIOOOOOUUUUCYN') LIKE translate(upper('%{$this->sqlTexto($nome_destino)}%'),'ÅÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÕÔÖÚÙÛÜÇÝÑ','AAAAAAEEEEIIIIOOOOOUUUUCYN')
         )";
 
             $whereAnd = ' AND ';
         }
 
         if (is_numeric($ano)) {
-            $filtros .= "{$whereAnd} ano = '{$ano}'";
+            $filtros .= "{$whereAnd} ano = '{$this->sqlTexto($ano)}'";
             $whereAnd = ' AND ';
         }
         if (is_string($ref_cod_empresa_transporte_escolar)) {
-            $filtros .= "{$whereAnd} ref_cod_empresa_transporte_escolar = '{$ref_cod_empresa_transporte_escolar}'";
+            $filtros .= "{$whereAnd} ref_cod_empresa_transporte_escolar = '{$this->sqlTexto($ref_cod_empresa_transporte_escolar)}'";
             $whereAnd = ' AND ';
         }
 
@@ -286,14 +288,14 @@ class clsModulesRotaTransporteEscolar extends Model
             cadastro.pessoa, modules.empresa_transporte_escolar
           WHERE
             idpes = ref_idpes and cod_empresa_transporte_escolar = ref_cod_empresa_transporte_escolar
-            AND (LOWER(nome)) LIKE (LOWER('%{$nome_empresa}%'))
+            AND (LOWER(nome)) LIKE (LOWER('%{$this->sqlTexto($nome_empresa)}%'))
         )";
 
             $whereAnd = ' AND ';
         }
 
         if (is_string($tercerizado)) {
-            $filtros .= "{$whereAnd} tercerizado = '{$tercerizado}'";
+            $filtros .= "{$whereAnd} tercerizado = '{$this->sqlTexto($tercerizado)}'";
             $whereAnd = ' AND ';
         }
 
@@ -348,7 +350,7 @@ class clsModulesRotaTransporteEscolar extends Model
                 cadastro.pessoa, modules.empresa_transporte_escolar
               WHERE
                 idpes = ref_idpes and cod_empresa_transporte_escolar = ref_cod_empresa_transporte_escolar
-             ) AS nome_empresa FROM {$this->_tabela} WHERE cod_rota_transporte_escolar = '{$this->cod_rota_transporte_escolar}'");
+             ) AS nome_empresa FROM {$this->_tabela} WHERE cod_rota_transporte_escolar = '{$this->sqlTexto($this->cod_rota_transporte_escolar)}'");
             $db->ProximoRegistro();
 
             return $db->Tupla();
@@ -366,7 +368,7 @@ class clsModulesRotaTransporteEscolar extends Model
     {
         if (is_numeric($this->cod_rota_transporte_escolar)) {
             $db = new clsBanco();
-            $db->Consulta("SELECT 1 FROM {$this->_tabela} WHERE cod_rota_transporte_escolar = '{$this->cod_rota_transporte_escolar}'");
+            $db->Consulta("SELECT 1 FROM {$this->_tabela} WHERE cod_rota_transporte_escolar = '{$this->sqlTexto($this->cod_rota_transporte_escolar)}'");
             $db->ProximoRegistro();
 
             return $db->Tupla();
@@ -384,7 +386,7 @@ class clsModulesRotaTransporteEscolar extends Model
     {
         if (is_numeric($this->cod_rota_transporte_escolar)) {
             $this->detalhe();
-            $sql = "DELETE FROM {$this->_tabela} WHERE cod_rota_transporte_escolar = '{$this->cod_rota_transporte_escolar}'";
+            $sql = "DELETE FROM {$this->_tabela} WHERE cod_rota_transporte_escolar = '{$this->sqlTexto($this->cod_rota_transporte_escolar)}'";
             $db = new clsBanco();
             $db->Consulta($sql);
 

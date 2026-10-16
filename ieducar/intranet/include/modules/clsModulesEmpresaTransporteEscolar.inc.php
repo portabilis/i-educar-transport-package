@@ -4,6 +4,8 @@ use iEducar\Legacy\Model;
 
 class clsModulesEmpresaTransporteEscolar extends Model
 {
+    use \iEducar\Packages\Transport\Support\EscapaSql;
+
     public $cod_empresa_transporte_escolar;
     public $ref_idpes;
     public $ref_resp_idpes;
@@ -54,13 +56,13 @@ class clsModulesEmpresaTransporteEscolar extends Model
 
             if (is_numeric($this->ref_idpes)) {
                 $campos .= "{$gruda}ref_idpes";
-                $valores .= "{$gruda}'{$this->ref_idpes}'";
+                $valores .= "{$gruda}'{$this->sqlTexto($this->ref_idpes)}'";
                 $gruda = ', ';
             }
 
             if (is_numeric($this->ref_resp_idpes)) {
                 $campos .= "{$gruda}ref_resp_idpes";
-                $valores .= "{$gruda}'{$this->ref_resp_idpes}'";
+                $valores .= "{$gruda}'{$this->sqlTexto($this->ref_resp_idpes)}'";
                 $gruda = ', ';
             }
 
@@ -98,12 +100,12 @@ class clsModulesEmpresaTransporteEscolar extends Model
             $set = '';
 
             if (is_numeric($this->ref_idpes)) {
-                $set .= "{$gruda}ref_idpes = '{$this->ref_idpes}'";
+                $set .= "{$gruda}ref_idpes = '{$this->sqlTexto($this->ref_idpes)}'";
                 $gruda = ', ';
             }
 
             if (is_numeric($this->ref_resp_idpes)) {
-                $set .= "{$gruda}ref_resp_idpes = '{$this->ref_resp_idpes}'";
+                $set .= "{$gruda}ref_resp_idpes = '{$this->sqlTexto($this->ref_resp_idpes)}'";
                 $gruda = ', ';
             }
 
@@ -114,7 +116,7 @@ class clsModulesEmpresaTransporteEscolar extends Model
             }
             if ($set) {
                 $this->detalhe();
-                $db->Consulta("UPDATE {$this->_tabela} SET $set WHERE cod_empresa_transporte_escolar = '{$this->cod_empresa_transporte_escolar}'");
+                $db->Consulta("UPDATE {$this->_tabela} SET $set WHERE cod_empresa_transporte_escolar = '{$this->sqlTexto($this->cod_empresa_transporte_escolar)}'");
 
                 return true;
             }
@@ -156,17 +158,17 @@ class clsModulesEmpresaTransporteEscolar extends Model
         $whereAnd = ' WHERE ';
 
         if (is_numeric($cod_empresa_transporte_escolar)) {
-            $filtros .= "{$whereAnd} cod_empresa_transporte_escolar = '{$cod_empresa_transporte_escolar}'";
+            $filtros .= "{$whereAnd} cod_empresa_transporte_escolar = '{$this->sqlTexto($cod_empresa_transporte_escolar)}'";
             $whereAnd = ' AND ';
         }
 
         if (is_numeric($ref_idpes)) {
-            $filtros .= "{$whereAnd} ref_idpes = '{$ref_idpes}'";
+            $filtros .= "{$whereAnd} ref_idpes = '{$this->sqlTexto($ref_idpes)}'";
             $whereAnd = ' AND ';
         }
 
         if (is_numeric($ref_resp_idpes)) {
-            $filtros .= "{$whereAnd} ref_resp_idpes = '{$ref_resp_idpes}'";
+            $filtros .= "{$whereAnd} ref_resp_idpes = '{$this->sqlTexto($ref_resp_idpes)}'";
             $whereAnd = ' AND ';
         }
 
@@ -237,7 +239,7 @@ class clsModulesEmpresaTransporteEscolar extends Model
             cadastro.pessoa
           WHERE
             idpes = ref_idpes
-         ) AS nome_empresa , (SELECT nome FROM cadastro.pessoa WHERE idpes = ref_resp_idpes) AS nome_responsavel FROM {$this->_tabela} WHERE cod_empresa_transporte_escolar = '{$this->cod_empresa_transporte_escolar}'");
+         ) AS nome_empresa , (SELECT nome FROM cadastro.pessoa WHERE idpes = ref_resp_idpes) AS nome_responsavel FROM {$this->_tabela} WHERE cod_empresa_transporte_escolar = '{$this->sqlTexto($this->cod_empresa_transporte_escolar)}'");
             $db->ProximoRegistro();
 
             return $db->Tupla();
@@ -255,7 +257,7 @@ class clsModulesEmpresaTransporteEscolar extends Model
     {
         if (is_numeric($this->cod_empresa_transporte_escolar)) {
             $db = new clsBanco();
-            $db->Consulta("SELECT 1 FROM {$this->_tabela} WHERE cod_empresa_transporte_escolar = '{$this->cod_empresa_transporte_escolar}'");
+            $db->Consulta("SELECT 1 FROM {$this->_tabela} WHERE cod_empresa_transporte_escolar = '{$this->sqlTexto($this->cod_empresa_transporte_escolar)}'");
             $db->ProximoRegistro();
 
             return $db->Tupla();
@@ -274,7 +276,7 @@ class clsModulesEmpresaTransporteEscolar extends Model
         if (is_numeric($this->cod_empresa_transporte_escolar)) {
             $this->detalhe();
 
-            $sql = "DELETE FROM {$this->_tabela} WHERE cod_empresa_transporte_escolar = '{$this->cod_empresa_transporte_escolar}'";
+            $sql = "DELETE FROM {$this->_tabela} WHERE cod_empresa_transporte_escolar = '{$this->sqlTexto($this->cod_empresa_transporte_escolar)}'";
             $db = new clsBanco();
             $db->Consulta($sql);
 
