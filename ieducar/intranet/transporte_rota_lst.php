@@ -47,6 +47,10 @@ return new class extends clsListagem {
             $this->$var = ($val === '') ? null: $val;
         }
 
+        // O código da empresa só filtra quando é número; lista() espera texto.
+        $empresa = (string) $this->ref_cod_empresa_transporte_escolar;
+        $this->ref_cod_empresa_transporte_escolar = ctype_digit($empresa) && strlen($empresa) <= 9 ? $empresa : null;
+
         $this->addCabecalhos([
             'Ano',
             'Código da rota',
@@ -77,7 +81,7 @@ return new class extends clsListagem {
 
         // Paginador
         $this->limite = 20;
-        $this->offset = ($_GET["pagina_{$this->nome}"]) ? $_GET["pagina_{$this->nome}"]*$this->limite-$this->limite: 0;
+        $this->offset = (min(max(1, request()->integer("pagina_{$this->nome}", 1)), 100000) - 1) * $this->limite;
 
         $obj_rota = new clsModulesRotaTransporteEscolar();
         $obj_rota->setOrderby(' descricao ASC');
