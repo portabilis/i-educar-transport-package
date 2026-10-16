@@ -4,6 +4,8 @@ use iEducar\Legacy\Model;
 
 class clsModulesMotorista extends Model
 {
+    use \iEducar\Packages\Transport\Support\EscapaSql;
+
     public $cod_motorista;
     public $ref_idpes;
     public $cnh;
@@ -81,43 +83,43 @@ class clsModulesMotorista extends Model
 
             if (is_numeric($this->cod_motorista)) {
                 $campos .= "{$gruda}cod_motorista";
-                $valores .= "{$gruda}'{$this->cod_motorista}'";
+                $valores .= "{$gruda}'{$this->sqlTexto($this->cod_motorista)}'";
                 $gruda = ', ';
             }
 
             if (is_numeric($this->ref_idpes)) {
                 $campos .= "{$gruda}ref_idpes";
-                $valores .= "{$gruda}'{$this->ref_idpes}'";
+                $valores .= "{$gruda}'{$this->sqlTexto($this->ref_idpes)}'";
                 $gruda = ', ';
             }
 
             if (is_string($this->cnh)) {
                 $campos .= "{$gruda}cnh";
-                $valores .= "{$gruda}'{$this->cnh}'";
+                $valores .= "{$gruda}'{$this->sqlTexto($this->cnh)}'";
                 $gruda = ', ';
             }
 
             if (is_string($this->tipo_cnh)) {
                 $campos .= "{$gruda}tipo_cnh";
-                $valores .= "{$gruda}'{$this->tipo_cnh}'";
+                $valores .= "{$gruda}'{$this->sqlTexto($this->tipo_cnh)}'";
                 $gruda = ', ';
             }
 
             if (is_string($this->dt_habilitacao) && trim($this->dt_habilitacao) != '') {
                 $campos .= "{$gruda}dt_habilitacao";
-                $valores .= "{$gruda}'{$this->dt_habilitacao}'";
+                $valores .= "{$gruda}'{$this->sqlTexto($this->dt_habilitacao)}'";
                 $gruda = ', ';
             }
 
             if (is_string($this->vencimento_cnh) && trim($this->vencimento_cnh) != '') {
                 $campos .= "{$gruda}vencimento_cnh";
-                $valores .= "{$gruda}'{$this->vencimento_cnh}'";
+                $valores .= "{$gruda}'{$this->sqlTexto($this->vencimento_cnh)}'";
                 $gruda = ', ';
             }
 
             if (is_numeric($this->ref_cod_empresa_transporte_escolar)) {
                 $campos .= "{$gruda}ref_cod_empresa_transporte_escolar";
-                $valores .= "{$gruda}'{$this->ref_cod_empresa_transporte_escolar}'";
+                $valores .= "{$gruda}'{$this->sqlTexto($this->ref_cod_empresa_transporte_escolar)}'";
                 $gruda = ', ';
             }
 
@@ -155,37 +157,37 @@ class clsModulesMotorista extends Model
             $gruda = '';
 
             if (is_numeric($this->cod_motorista)) {
-                $set .= "{$gruda}cod_motorista = '{$this->cod_motorista}'";
+                $set .= "{$gruda}cod_motorista = '{$this->sqlTexto($this->cod_motorista)}'";
                 $gruda = ', ';
             }
 
             if (is_numeric($this->ref_idpes)) {
-                $set .= "{$gruda}ref_idpes = '{$this->ref_idpes}'";
+                $set .= "{$gruda}ref_idpes = '{$this->sqlTexto($this->ref_idpes)}'";
                 $gruda = ', ';
             }
 
             if (is_string($this->cnh)) {
-                $set .= "{$gruda}cnh = '{$this->cnh}'";
+                $set .= "{$gruda}cnh = '{$this->sqlTexto($this->cnh)}'";
                 $gruda = ', ';
             }
 
             if (is_string($this->tipo_cnh)) {
-                $set .= "{$gruda}tipo_cnh = '{$this->tipo_cnh}'";
+                $set .= "{$gruda}tipo_cnh = '{$this->sqlTexto($this->tipo_cnh)}'";
                 $gruda = ', ';
             }
 
             if (is_string($this->dt_habilitacao) && trim($this->dt_habilitacao) != '') {
-                $set .= "{$gruda}dt_habilitacao = '{$this->dt_habilitacao}'";
+                $set .= "{$gruda}dt_habilitacao = '{$this->sqlTexto($this->dt_habilitacao)}'";
                 $gruda = ', ';
             }
 
             if (is_string($this->vencimento_cnh) && trim($this->vencimento_cnh) != '') {
-                $set .= "{$gruda}vencimento_cnh = '{$this->vencimento_cnh}'";
+                $set .= "{$gruda}vencimento_cnh = '{$this->sqlTexto($this->vencimento_cnh)}'";
                 $gruda = ', ';
             }
 
             if (is_numeric($this->ref_cod_empresa_transporte_escolar)) {
-                $set .= "{$gruda}ref_cod_empresa_transporte_escolar = '{$this->ref_cod_empresa_transporte_escolar}'";
+                $set .= "{$gruda}ref_cod_empresa_transporte_escolar = '{$this->sqlTexto($this->ref_cod_empresa_transporte_escolar)}'";
                 $gruda = ', ';
             }
 
@@ -197,7 +199,7 @@ class clsModulesMotorista extends Model
 
             if ($set) {
                 $this->detalhe();
-                $db->Consulta("UPDATE {$this->_tabela} SET $set WHERE cod_motorista = '{$this->cod_motorista}'");
+                $db->Consulta("UPDATE {$this->_tabela} SET $set WHERE cod_motorista = '{$this->sqlTexto($this->cod_motorista)}'");
 
                 return true;
             }
@@ -233,12 +235,12 @@ class clsModulesMotorista extends Model
 
         $whereAnd = ' WHERE ';
         if (is_numeric($cod_motorista)) {
-            $filtros .= "{$whereAnd} cod_motorista = '{$cod_motorista}'";
+            $filtros .= "{$whereAnd} cod_motorista = '{$this->sqlTexto($cod_motorista)}'";
             $whereAnd = ' AND ';
         }
 
         if (is_numeric($ref_idpes)) {
-            $filtros .= "{$whereAnd} ref_idpes = '{$ref_idpes}'";
+            $filtros .= "{$whereAnd} ref_idpes = '{$this->sqlTexto($ref_idpes)}'";
             $whereAnd = ' AND ';
         }
 
@@ -251,17 +253,17 @@ class clsModulesMotorista extends Model
         }
 
         if (is_string($cnh)) {
-            $filtros .= "{$whereAnd} cnh = '{$cnh}'";
+            $filtros .= "{$whereAnd} cnh = '{$this->sqlTexto($cnh)}'";
             $whereAnd = ' AND ';
         }
 
         if (is_string($tipo_cnh)) {
-            $filtros .= "{$whereAnd} tipo_cnh = '{$tipo_cnh}'";
+            $filtros .= "{$whereAnd} tipo_cnh = '{$this->sqlTexto($tipo_cnh)}'";
             $whereAnd = ' AND ';
         }
 
         if (is_numeric($ref_cod_empresa_transporte_escolar)) {
-            $filtros .= "{$whereAnd} ref_cod_empresa_transporte_escolar = '{$ref_cod_empresa_transporte_escolar}'";
+            $filtros .= "{$whereAnd} ref_cod_empresa_transporte_escolar = '{$this->sqlTexto($ref_cod_empresa_transporte_escolar)}'";
             $whereAnd = ' AND ';
         }
 
@@ -309,7 +311,7 @@ class clsModulesMotorista extends Model
             modules.empresa_transporte_escolar emp,cadastro.pessoa p
           WHERE
             ref_cod_empresa_transporte_escolar = cod_empresa_transporte_escolar AND p.idpes = emp.ref_idpes
-         ) AS nome_empresa , (SELECT nome FROM cadastro.pessoa WHERE idpes = ref_idpes) AS nome_motorista  FROM {$this->_tabela} WHERE cod_motorista = '{$this->cod_motorista}'");
+         ) AS nome_empresa , (SELECT nome FROM cadastro.pessoa WHERE idpes = ref_idpes) AS nome_motorista  FROM {$this->_tabela} WHERE cod_motorista = '{$this->sqlTexto($this->cod_motorista)}'");
             $db->ProximoRegistro();
 
             return $db->Tupla();
@@ -327,7 +329,7 @@ class clsModulesMotorista extends Model
     {
         if (is_numeric($this->cod_motorista)) {
             $db = new clsBanco();
-            $db->Consulta("SELECT 1 FROM {$this->_tabela} WHERE cod_motorista = '{$this->cod_motorista}'");
+            $db->Consulta("SELECT 1 FROM {$this->_tabela} WHERE cod_motorista = '{$this->sqlTexto($this->cod_motorista)}'");
             $db->ProximoRegistro();
 
             return $db->Tupla();
@@ -346,7 +348,7 @@ class clsModulesMotorista extends Model
         if (is_numeric($this->cod_motorista)) {
             $this->detalhe();
 
-            $sql = "DELETE FROM {$this->_tabela} WHERE cod_motorista = '{$this->cod_motorista}'";
+            $sql = "DELETE FROM {$this->_tabela} WHERE cod_motorista = '{$this->sqlTexto($this->cod_motorista)}'";
             $db = new clsBanco();
             $db->Consulta($sql);
 

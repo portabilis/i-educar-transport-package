@@ -4,6 +4,8 @@ use iEducar\Legacy\Model;
 
 class clsModulesPontoTransporteEscolar extends Model
 {
+    use \iEducar\Packages\Transport\Support\EscapaSql;
+
     public $cod_ponto_transporte_escolar;
     public $descricao;
     public $cep;
@@ -54,25 +56,25 @@ class clsModulesPontoTransporteEscolar extends Model
 
             if (is_numeric($this->cep)) {
                 $campos .= "{$gruda}cep";
-                $valores .= "{$gruda} {$this->cep}";
+                $valores .= "{$gruda} {$this->sqlNumero($this->cep)}";
                 $gruda = ', ';
             }
 
             if (is_numeric($this->idlog)) {
                 $campos .= "{$gruda}idlog";
-                $valores .= "{$gruda} {$this->idlog}";
+                $valores .= "{$gruda} {$this->sqlNumero($this->idlog)}";
                 $gruda = ', ';
             }
 
             if (is_numeric($this->idbai)) {
                 $campos .= "{$gruda}idbai";
-                $valores .= "{$gruda} {$this->idbai}";
+                $valores .= "{$gruda} {$this->sqlNumero($this->idbai)}";
                 $gruda = ', ';
             }
 
             if (is_numeric($this->numero)) {
                 $campos .= "{$gruda}numero";
-                $valores .= "{$gruda}'{$this->numero}'";
+                $valores .= "{$gruda}'{$this->sqlTexto($this->numero)}'";
                 $gruda = ', ';
             }
 
@@ -85,13 +87,13 @@ class clsModulesPontoTransporteEscolar extends Model
 
             if (is_numeric($this->latitude)) {
                 $campos .= "{$gruda}latitude";
-                $valores .= "{$gruda}'{$this->latitude}'";
+                $valores .= "{$gruda}'{$this->sqlTexto($this->latitude)}'";
                 $gruda = ', ';
             }
 
             if (is_numeric($this->longitude)) {
                 $campos .= "{$gruda}longitude";
-                $valores .= "{$gruda}'{$this->longitude}'";
+                $valores .= "{$gruda}'{$this->sqlTexto($this->longitude)}'";
                 $gruda = ', ';
             }
 
@@ -128,17 +130,17 @@ class clsModulesPontoTransporteEscolar extends Model
             }
 
             if (is_numeric($this->cep)) {
-                $set .= "{$gruda}cep = '{$this->cep}'";
+                $set .= "{$gruda}cep = '{$this->sqlTexto($this->cep)}'";
                 $gruda = ', ';
             }
 
             if (is_numeric($this->idlog)) {
-                $set .= "{$gruda}idlog = '{$this->idlog}'";
+                $set .= "{$gruda}idlog = '{$this->sqlTexto($this->idlog)}'";
                 $gruda = ', ';
             }
 
             if (is_numeric($this->idbai)) {
-                $set .= "{$gruda}idbai = '{$this->idbai}'";
+                $set .= "{$gruda}idbai = '{$this->sqlTexto($this->idbai)}'";
                 $gruda = ', ';
             }
 
@@ -149,23 +151,23 @@ class clsModulesPontoTransporteEscolar extends Model
             }
 
             if (is_numeric($this->numero)) {
-                $set .= "{$gruda}numero = '{$this->numero}'";
+                $set .= "{$gruda}numero = '{$this->sqlTexto($this->numero)}'";
                 $gruda = ', ';
             }
 
             if (is_numeric($this->latitude)) {
-                $set .= "{$gruda}latitude = '{$this->latitude}'";
+                $set .= "{$gruda}latitude = '{$this->sqlTexto($this->latitude)}'";
                 $gruda = ', ';
             }
 
             if (is_numeric($this->longitude)) {
-                $set .= "{$gruda}longitude = '{$this->longitude}'";
+                $set .= "{$gruda}longitude = '{$this->sqlTexto($this->longitude)}'";
                 $gruda = ', ';
             }
 
             if ($set) {
                 $this->detalhe();
-                $db->Consulta("UPDATE {$this->_tabela} SET $set WHERE cod_ponto_transporte_escolar = '{$this->cod_ponto_transporte_escolar}'");
+                $db->Consulta("UPDATE {$this->_tabela} SET $set WHERE cod_ponto_transporte_escolar = '{$this->sqlTexto($this->cod_ponto_transporte_escolar)}'");
 
                 return true;
             }
@@ -203,7 +205,7 @@ class clsModulesPontoTransporteEscolar extends Model
         $whereAnd = ' WHERE ';
 
         if (is_numeric($cod_ponto_transporte_escolar)) {
-            $filtros .= "{$whereAnd} cod_ponto_transporte_escolar = '{$cod_ponto_transporte_escolar}'";
+            $filtros .= "{$whereAnd} cod_ponto_transporte_escolar = '{$this->sqlTexto($cod_ponto_transporte_escolar)}'";
             $whereAnd = ' AND ';
         }
 
@@ -264,7 +266,7 @@ class clsModulesPontoTransporteEscolar extends Model
             LEFT JOIN public.places p ON p.id = ponto_transporte_escolar.idlog
             LEFT JOIN public.cities c ON c.id = p.city_id
             LEFT JOIN public.states s ON s.id = c.state_id
-            WHERE cod_ponto_transporte_escolar = '{$this->cod_ponto_transporte_escolar}'");
+            WHERE cod_ponto_transporte_escolar = '{$this->sqlTexto($this->cod_ponto_transporte_escolar)}'");
             $db->ProximoRegistro();
 
             return $db->Tupla();
@@ -282,7 +284,7 @@ class clsModulesPontoTransporteEscolar extends Model
     {
         if (is_numeric($this->cod_ponto_transporte_escolar)) {
             $db = new clsBanco();
-            $db->Consulta("SELECT 1 FROM {$this->_tabela} WHERE cod_ponto_transporte_escolar = '{$this->cod_ponto_transporte_escolar}'");
+            $db->Consulta("SELECT 1 FROM {$this->_tabela} WHERE cod_ponto_transporte_escolar = '{$this->sqlTexto($this->cod_ponto_transporte_escolar)}'");
             $db->ProximoRegistro();
 
             return $db->Tupla();
@@ -301,7 +303,7 @@ class clsModulesPontoTransporteEscolar extends Model
         if (is_numeric($this->cod_ponto_transporte_escolar)) {
             $this->detalhe();
 
-            $sql = "DELETE FROM {$this->_tabela} WHERE cod_ponto_transporte_escolar = '{$this->cod_ponto_transporte_escolar}'";
+            $sql = "DELETE FROM {$this->_tabela} WHERE cod_ponto_transporte_escolar = '{$this->sqlTexto($this->cod_ponto_transporte_escolar)}'";
             $db = new clsBanco();
             $db->Consulta($sql);
 

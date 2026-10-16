@@ -4,6 +4,8 @@ use iEducar\Legacy\Model;
 
 class clsModulesTipoVeiculo extends Model
 {
+    use \iEducar\Packages\Transport\Support\EscapaSql;
+
     public $cod_tipo_veiculo;
     public $descricao;
 
@@ -39,7 +41,7 @@ class clsModulesTipoVeiculo extends Model
             $gruda = '';
 
             $campos .= "{$gruda}descricao";
-            $valores .= "{$gruda}'{$this->descricao}'";
+            $valores .= "{$gruda}'{$this->sqlTexto($this->descricao)}'";
             $gruda = ', ';
 
             $db->Consulta("INSERT INTO {$this->_tabela} ( $campos ) VALUES( $valores )");
@@ -61,10 +63,10 @@ class clsModulesTipoVeiculo extends Model
             $db = new clsBanco();
             $set = '';
 
-            $set .= "descricao = '{$this->descricao}'";
+            $set .= "descricao = '{$this->sqlTexto($this->descricao)}'";
 
             if ($set) {
-                $db->Consulta("UPDATE {$this->_tabela} SET $set WHERE cod_empresa_transporte_escolar = '{$this->cod_empresa_transporte_escolar}'");
+                $db->Consulta("UPDATE {$this->_tabela} SET $set WHERE cod_empresa_transporte_escolar = '{$this->sqlTexto($this->cod_empresa_transporte_escolar)}'");
 
                 return true;
             }
@@ -86,12 +88,12 @@ class clsModulesTipoVeiculo extends Model
         $whereAnd = ' WHERE ';
 
         if (is_numeric($cod_tipo_veiculo)) {
-            $filtros .= "{$whereAnd} cod_tipo_veiculo = '{$cod_tipo_veiculo}'";
+            $filtros .= "{$whereAnd} cod_tipo_veiculo = '{$this->sqlTexto($cod_tipo_veiculo)}'";
             $whereAnd = ' AND ';
         }
 
         if (is_string($descricao)) {
-            $filtros .= "{$whereAnd} (LOWER(descricao)) LIKE (LOWER('%{$descricao}%'))";
+            $filtros .= "{$whereAnd} (LOWER(descricao)) LIKE (LOWER('%{$this->sqlTexto($descricao)}%'))";
             $whereAnd = ' AND ';
         }
 
@@ -140,7 +142,7 @@ class clsModulesTipoVeiculo extends Model
                 cadastro.pessoa
               WHERE
                 idpes = ref_idpes
-             ) AS nome_empresa , (SELECT nome FROM cadastro.pessoa WHERE idpes = ref_resp_idpes) AS nome_responsavel FROM {$this->_tabela} WHERE cod_empresa_transporte_escolar = '{$this->cod_empresa_transporte_escolar}'");
+             ) AS nome_empresa , (SELECT nome FROM cadastro.pessoa WHERE idpes = ref_resp_idpes) AS nome_responsavel FROM {$this->_tabela} WHERE cod_empresa_transporte_escolar = '{$this->sqlTexto($this->cod_empresa_transporte_escolar)}'");
             $db->ProximoRegistro();
 
             return $db->Tupla();
@@ -158,7 +160,7 @@ class clsModulesTipoVeiculo extends Model
     {
         if (is_numeric($this->cod_empresa_transporte_escolar)) {
             $db = new clsBanco();
-            $db->Consulta("SELECT 1 FROM {$this->_tabela} WHERE cod_empresa_transporte_escolar = '{$this->cod_empresa_transporte_escolar}'");
+            $db->Consulta("SELECT 1 FROM {$this->_tabela} WHERE cod_empresa_transporte_escolar = '{$this->sqlTexto($this->cod_empresa_transporte_escolar)}'");
             $db->ProximoRegistro();
 
             return $db->Tupla();
@@ -175,7 +177,7 @@ class clsModulesTipoVeiculo extends Model
     public function excluir()
     {
         if (is_numeric($this->cod_empresa_transporte_escolar)) {
-            $sql = "DELETE FROM {$this->_tabela} WHERE cod_empresa_transporte_escolar = '{$this->cod_empresa_transporte_escolar}'";
+            $sql = "DELETE FROM {$this->_tabela} WHERE cod_empresa_transporte_escolar = '{$this->sqlTexto($this->cod_empresa_transporte_escolar)}'";
             $db = new clsBanco();
             $db->Consulta($sql);
 
