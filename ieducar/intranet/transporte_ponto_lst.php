@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Gate;
+
 return new class extends clsListagem {
 
     /**
@@ -44,10 +46,6 @@ return new class extends clsListagem {
         $this->campoNumero('cod_ponto', 'Código do ponto', $this->cod_ponto, 20, 255, false);
         $this->campoTexto('descricao', 'Descrição', $this->descricao, 50, 255, false);
 
-        $obj_permissoes = new clsPermissoes();
-
-        $obj_permissoes->nivel_acesso($this->pessoa_logada);
-
         $this->addCabecalhos([
             'Código do ponto',
             'Descrição',
@@ -86,9 +84,7 @@ return new class extends clsListagem {
 
         $this->addPaginador2('transporte_ponto_lst.php', $total, $_GET, $this->nome, $this->limite);
 
-        $obj_permissao = new clsPermissoes();
-
-        if ($obj_permissao->permissao_cadastra(21239, $this->pessoa_logada, 7, null, true)) {
+        if (Gate::allows('modify', 21239)) {
             $this->acao = 'go("../module/TransporteEscolar/Ponto")';
             $this->nome_acao = 'Novo';
         }

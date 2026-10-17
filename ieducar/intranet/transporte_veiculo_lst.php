@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Gate;
+
 return new class extends clsListagem {
     /**
      * Referencia pega da session para o idpes do usuario atual
@@ -118,9 +120,7 @@ return new class extends clsListagem {
 
         $this->largura = '100%';
 
-        $obj_permissao = new clsPermissoes();
-
-        if ($obj_permissao->permissao_cadastra(21237, $this->pessoa_logada, 7, null, true)) {
+        if (Gate::allows('modify', 21237)) {
             $this->acao = 'go("/module/TransporteEscolar/Veiculo")';
             $this->nome_acao = 'Novo';
         }

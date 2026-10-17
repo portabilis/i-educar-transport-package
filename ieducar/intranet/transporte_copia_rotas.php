@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Gate;
+
 return new class extends clsCadastro {
     public $pessoa_logada;
     public $nome_url_sucesso = 'Efetuar cópia';
@@ -8,8 +10,9 @@ return new class extends clsCadastro {
     {
         $retorno = 'Novo';
 
-        $obj_permissoes = new clsPermissoes();
-        $obj_permissoes->permissao_cadastra(950, $this->pessoa_logada, 7);
+        if (!Gate::allows('modify', 21246)) {
+            $this->simpleRedirect('educar_transporte_escolar_index.php');
+        }
 
         $this->breadcrumb('Cópia de rotas', [
         url('intranet/educar_transporte_escolar_index.php') => 'Transporte escolar',
@@ -58,6 +61,10 @@ return new class extends clsCadastro {
 
     public function Novo()
     {
+        if (!Gate::allows('modify', 21246)) {
+            $this->simpleRedirect('educar_transporte_escolar_index.php');
+        }
+
         if (!$this->ano_orig or !$this->ref_cod_empresa_transporte_escolar or !$this->ano_dest) {
             $this->mensagem = 'Preencha os dados corretamente.<br>';
 
