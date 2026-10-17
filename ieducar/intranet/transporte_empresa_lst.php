@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Gate;
+
 return new class extends clsListagem {
 
     /**
@@ -46,10 +48,6 @@ return new class extends clsListagem {
         $this->campoTexto('nome_empresa', 'Nome fantasia', $this->nome_empresa, 50, 255, false);
         $this->campoTexto('nome_responsavel', 'Nome do responsável', $this->nome_responsavel, 50, 255, false);
 
-        $obj_permissoes = new clsPermissoes();
-
-        $obj_permissoes->nivel_acesso($this->pessoa_logada);
-
         $this->addCabecalhos([
             'Código da empresa',
             'Nome fantasia',
@@ -80,9 +78,7 @@ return new class extends clsListagem {
 
         $this->largura = '100%';
 
-        $obj_permissao = new clsPermissoes();
-
-        if ($obj_permissao->permissao_cadastra(21235, $this->pessoa_logada, 7, null, true)) {
+        if (Gate::allows('modify', 21235)) {
             $this->acao = 'go("../module/TransporteEscolar/Empresa")';
             $this->nome_acao = 'Novo';
         }

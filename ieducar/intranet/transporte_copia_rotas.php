@@ -8,9 +8,6 @@ return new class extends clsCadastro {
     {
         $retorno = 'Novo';
 
-        $obj_permissoes = new clsPermissoes();
-        $obj_permissoes->permissao_cadastra(950, $this->pessoa_logada, 7);
-
         $this->breadcrumb('Cópia de rotas', [
         url('intranet/educar_transporte_escolar_index.php') => 'Transporte escolar',
     ]);

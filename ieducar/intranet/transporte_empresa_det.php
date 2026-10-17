@@ -4,17 +4,13 @@ use App\Models\LegacyOrganization;
 use App\Models\LegacyPerson;
 use App\Models\LegacyPhone;
 use App\Models\PersonHasPlace;
+use Illuminate\Support\Facades\Gate;
 
 return new class extends clsDetalhe {
     public $titulo;
 
     public function Gerar()
     {
-        // Verificação de permissão para cadastro.
-        $this->obj_permissao = new clsPermissoes();
-
-        $this->nivel_usuario = $this->obj_permissao->nivel_acesso($this->pessoa_logada);
-
         $this->titulo = 'Empresa transporte escolar - Detalhe';
 
         $cod_empresa_transporte_escolar = $_GET['cod_empresa'];
@@ -63,9 +59,7 @@ return new class extends clsDetalhe {
         $this->addDetalhe(['Observação', $registro['observacao']]);
         $this->url_cancelar = 'transporte_empresa_lst.php';
 
-        $obj_permissao = new clsPermissoes();
-
-        if ($obj_permissao->permissao_cadastra(21235, $this->pessoa_logada, 7, null, true)) {
+        if (Gate::allows('modify', 21235)) {
             $this->url_novo = '../module/TransporteEscolar/Empresa';
             $this->url_editar = "../module/TransporteEscolar/Empresa?id={$cod_empresa_transporte_escolar}";
         }

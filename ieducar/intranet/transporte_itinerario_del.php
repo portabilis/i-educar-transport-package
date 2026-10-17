@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Gate;
+
 return new class extends clsCadastro {
     public $cod_rota;
 
@@ -7,8 +9,9 @@ return new class extends clsCadastro {
     {
         $this->cod_rota=$_GET['cod_rota'];
 
-        $obj_permissoes = new clsPermissoes();
-        $obj_permissoes->permissao_cadastra(578, $this->pessoa_logada, 7, "transporte_itinerario_cad.php?cod_rota={$this->cod_rota}");
+        if (!Gate::allows('modify', 578)) {
+            $this->simpleRedirect("transporte_itinerario_cad.php?cod_rota={$this->cod_rota}");
+        }
 
         $obj  = new clsModulesItinerarioTransporteEscolar();
         $excluiu = $obj->excluirTodos($this->cod_rota);
