@@ -9,7 +9,7 @@ return new class extends clsCadastro {
     {
         $this->cod_rota=$_GET['cod_rota'];
 
-        if (!Gate::allows('modify', 578)) {
+        if (!Gate::allows('modify', 21238)) {
             $this->simpleRedirect("transporte_itinerario_cad.php?cod_rota={$this->cod_rota}");
         }
 
