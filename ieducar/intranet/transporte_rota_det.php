@@ -1,15 +1,12 @@
 <?php
 
+use Illuminate\Support\Facades\Gate;
+
 return new class extends clsDetalhe {
     public $titulo;
 
     public function Gerar()
     {
-        // Verificação de permissão para cadastro.
-        $this->obj_permissao = new clsPermissoes();
-
-        $this->nivel_usuario = $this->obj_permissao->nivel_acesso($this->pessoa_logada);
-
         $this->titulo = 'Rota - Detalhe';
 
         $cod_rota_transporte_escolar = $_GET['cod_rota'];
@@ -107,9 +104,7 @@ return new class extends clsDetalhe {
             $this->addDetalhe(['Itinerário', '<a style=\' text-decoration: underline; font-size: 12px;\' href=\'/intranet/transporte_itinerario_cad.php?cod_rota='.$cod_rota_transporte_escolar.'\'>Editar itinerário</a>']);
         }
 
-        $obj_permissao = new clsPermissoes();
-
-        if ($obj_permissao->permissao_cadastra(21238, $this->pessoa_logada, 7, null, true)) {
+        if (Gate::allows('modify', 21238)) {
             $this->url_novo = '../module/TransporteEscolar/Rota';
             $this->url_editar = "../module/TransporteEscolar/Rota?id={$cod_rota_transporte_escolar}";
         }

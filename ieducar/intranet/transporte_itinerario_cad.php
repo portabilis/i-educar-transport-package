@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Gate;
+
 return new class extends clsCadastro {
     /**
      * Referencia pega da session para o idpes do usuario atual
@@ -34,8 +36,9 @@ return new class extends clsCadastro {
 
         $this->cod_rota=$_GET['cod_rota'];
 
-        $obj_permissoes = new clsPermissoes();
-        $obj_permissoes->permissao_cadastra(21238, $this->pessoa_logada, 7, "transporte_rota_det.php?cod_rota={$this->cod_rota}");
+        if (!Gate::allows('modify', 21238)) {
+            $this->simpleRedirect("transporte_rota_det.php?cod_rota={$this->cod_rota}");
+        }
         $volta = false;
         if (is_numeric($this->cod_rota)) {
             $obj = new clsModulesRotaTransporteEscolar($this->cod_rota);
@@ -128,8 +131,9 @@ return new class extends clsCadastro {
 
     public function Editar()
     {
-        $obj_permissoes = new clsPermissoes();
-        $obj_permissoes->permissao_cadastra(21238, $this->pessoa_logada, 7, "transporte_rota_det.php?cod_rota={$this->cod_rota}");
+        if (!Gate::allows('modify', 21238)) {
+            $this->simpleRedirect("transporte_rota_det.php?cod_rota={$this->cod_rota}");
+        }
 
         if ($this->ref_cod_ponto_transporte_escolar) {
             $obj  = new clsModulesItinerarioTransporteEscolar();

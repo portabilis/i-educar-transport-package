@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Gate;
+
 return new class extends clsListagem {
 
     /**
@@ -52,10 +54,6 @@ return new class extends clsListagem {
 
         $this->inputsHelper()->dynamic('rotas', ['required' =>  false]);
 
-        $obj_permissoes = new clsPermissoes();
-
-        $obj_permissoes->nivel_acesso($this->pessoa_logada);
-
         $this->addCabecalhos([
             'Código',
             'Nome da pessoa',
@@ -89,9 +87,7 @@ return new class extends clsListagem {
 
         $this->largura = '100%';
 
-        $obj_permissao = new clsPermissoes();
-
-        if ($obj_permissao->permissao_cadastra(21240, $this->pessoa_logada, 7, null, true)) {
+        if (Gate::allows('modify', 21240)) {
             $this->acao = 'go("../module/TransporteEscolar/Pessoatransporte")';
             $this->nome_acao = 'Novo';
         }

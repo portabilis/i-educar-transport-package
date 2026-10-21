@@ -1,15 +1,12 @@
 <?php
 
+use Illuminate\Support\Facades\Gate;
+
 return new class extends clsDetalhe {
     public $titulo;
 
     public function Gerar()
     {
-        // Verificação de permissão para cadastro.
-        $this->obj_permissao = new clsPermissoes();
-
-        $this->nivel_usuario = $this->obj_permissao->nivel_acesso($this->pessoa_logada);
-
         $this->titulo = 'Motorista - Detalhe';
 
         $cod_motorista = $_GET['cod_motorista'];
@@ -35,9 +32,7 @@ return new class extends clsDetalhe {
         $this->addDetalhe(['Observação', $registro['observacao']]);
         $this->url_cancelar = 'transporte_motorista_lst.php';
 
-        $obj_permissao = new clsPermissoes();
-
-        if ($obj_permissao->permissao_cadastra(21236, $this->pessoa_logada, 7, null, true)) {
+        if (Gate::allows('modify', 21236)) {
             $this->url_novo = '../module/TransporteEscolar/Motorista';
             $this->url_editar = "../module/TransporteEscolar/motorista?id={$cod_motorista}";
         }
