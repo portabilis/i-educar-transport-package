@@ -3,10 +3,19 @@
 namespace iEducar\Packages\Transport\Providers;
 
 use App\Http\Controllers\LegacyController;
+use App\Support\Permissions\PermissionCatalog;
+use iEducar\Packages\Transport\Permissions\PackagePermissions;
 use Illuminate\Support\ServiceProvider;
 
 class TransportServiceProvider extends ServiceProvider
 {
+    public function register()
+    {
+        $this->callAfterResolving(PermissionCatalog::class, function (PermissionCatalog $catalog) {
+            $catalog->register(...PackagePermissions::definitions());
+        });
+    }
+
     public function boot()
     {
         if ($this->app->runningInConsole()) {
